@@ -1,0 +1,65 @@
+﻿@page "/movies/create"
+@inject Projekt4_Bazodanowa_aplikacja_webowa.Data.ApplicationDbContext DB
+@using Projekt4_Bazodanowa_aplikacja_webowa
+@inject NavigationManager NavigationManager
+@using Syncfusion.Blazor.Inputs
+@rendermode InteractiveServer
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h4>Movie</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Movie" OnValidSubmit="AddMovie" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label> 
+                <InputText id="title" @bind-Value="Movie.Title" class="form-control" /> 
+                <ValidationMessage For="() => Movie.Title" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label> 
+                <InputText id="description" @bind-Value="Movie.Description" class="form-control" /> 
+                <ValidationMessage For="() => Movie.Description" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label> Relase Date </label> 
+                <InputDate id="relasedate" @bind-Value="Movie.RelaseDate" class="form-control" /> 
+                <ValidationMessage For="() => Movie.RelaseDate" class="text-danger" /> 
+            </div> 
+
+            <div>
+                <label for="rating" class="form-label">Rating:</label> 
+                <InputNumber id="rating" @bind-Value="Movie.Rating" class="form-control" /> 
+                <ValidationMessage For="() => Movie.Rating" class="text-danger" /> 
+            </div>    
+            
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/movies">Back to List</a>
+</div>
+
+
+@code {
+
+    [SupplyParameterFromForm]
+    public Movie Movie { get; set; } = new();
+    
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    public async Task AddMovie()
+    {
+        DB.Movie.Add(Movie);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/movies");
+    }
+
+}
