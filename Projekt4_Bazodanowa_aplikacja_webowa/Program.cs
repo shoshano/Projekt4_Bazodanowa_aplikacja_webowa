@@ -14,6 +14,9 @@ namespace Projekt4_Bazodanowa_aplikacja_webowa
     {
         public static void Main(string[] args)
         {
+            //ClientId - 496849587780-oc4n9htlee4g0oiodeud8kbm0g5bp26i.apps.googleusercontent.com
+            //ClientSecret - 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
+
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddSyncfusionBlazor();
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NBaF1cXmhPYVJ3WmFZfVpgfF9GYVZVQmYuP1ZhSXxXdkBiW39WcHVRT2leV0M=");
@@ -24,6 +27,10 @@ namespace Projekt4_Bazodanowa_aplikacja_webowa
 
             builder.Services.AddAuthentication(
                 CertificateAuthenticationDefaults.AuthenticationScheme)
+                .AddGoogle(googleOptions => {
+                    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+                })
                 .AddCertificate();
 
             builder.Services.AddCascadingAuthenticationState();

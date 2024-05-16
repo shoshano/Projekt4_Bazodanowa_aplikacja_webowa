@@ -10,7 +10,8 @@ namespace Projekt4_Bazodanowa_aplikacja_webowa
         public string? Description { get; set; }
         [DataType(DataType.Date)]
         public DateTime RelaseDate { get; set; } = DateTime.Now;
-        public List<float>? Rating { get; set; }
+        public float? Rating { get; set; }
+        public int? rateCount { get; set; }
         public string? FotoUrl { get; set; }
     }
 }

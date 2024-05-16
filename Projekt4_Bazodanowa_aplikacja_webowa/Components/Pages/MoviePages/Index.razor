@@ -1,26 +1,35 @@
-﻿@page "/movies"
+﻿@page "/"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @inject Projekt4_Bazodanowa_aplikacja_webowa.Data.ApplicationDbContext DB
 @using Projekt4_Bazodanowa_aplikacja_webowa
 @rendermode InteractiveServer
+
 
 <PageTitle>Index</PageTitle>
 
 <h1>Movies</h1>
 
 <p>
-    <a href="movies/create">Create New</a>
+    <a href="create">Create New</a>
 </p>
 
 <QuickGrid Class="table" Items="DB.Movie">
     <PropertyColumn Property="movie => movie.Title" Sortable="true"/>
-    <!--<PropertyColumn Property="movie => movie.Description" />-->
+    @*<PropertyColumn Property="movie => movie.Description" />*@
     <PropertyColumn Property="movie => movie.RelaseDate.Year"  Sortable="true"/>
-    <PropertyColumn Property="movie => movie.Rating" Sortable="true" />
+    <PropertyColumn Property="movie =>   movie.Rating/movie.rateCount" Sortable="true" />
+    
 
     <TemplateColumn Context="movie">
-        <a href="@($"movies/edit?id={movie.Id}")">Edit</a> |
-        <a href="@($"movies/details?id={movie.Id}")">Details</a> |
-        <a href="@($"movies/delete?id={movie.Id}")">Delete</a>
+        <AuthorizeView>
+            <Authorized>
+                <a class="btn btn-primary" href="@($"edit?id={movie.Id}")">Edit</a> |
+                <a class="btn btn-info" href="@($"details?id={movie.Id}")">Details</a> |
+                <a class="btn btn-danger" href="@($"delete?id={movie.Id}")">Delete</a>
+            </Authorized>
+            <NotAuthorized><a class="btn btn-info" href="Account/Login">Log in to see delits</a></NotAuthorized>
+        </AuthorizeView>
     </TemplateColumn>
+
+
 </QuickGrid>

@@ -1,4 +1,4 @@
-﻿@page "/movies/create"
+﻿@page "/create"
 @inject Projekt4_Bazodanowa_aplikacja_webowa.Data.ApplicationDbContext DB
 @using Projekt4_Bazodanowa_aplikacja_webowa
 @inject NavigationManager NavigationManager
@@ -34,32 +34,49 @@
 
             <div>
                 <label for="rating" class="form-label">Rating:</label> 
-                <InputNumber id="rating" @bind-Value="Movie.Rating" class="form-control" /> 
-                <ValidationMessage For="() => Movie.Rating" class="text-danger" /> 
+                <InputNumber id="rating" @bind-Value="@rating" class="form-control" /> 
+                <ValidationMessage For="() => rating" class="text-danger" /> 
+
             </div>    
-            
-            <button type="submit" class="btn btn-primary">Create</button>
+
+            <div class="mb-3">
+                <label for="fotourl" class="form-label">FotoURL:</label> 
+                <InputText id="fotourl" @bind-Value="Movie.FotoUrl" class="form-control" /> 
+                <ValidationMessage For="() => Movie.FotoUrl" class="text-danger" /> 
+            </div> 
+            <div>
+                <a class="btn btn-info" href="/">Cancel</a>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
         </EditForm>
     </div>
 </div>
 
-<div>
-    <a href="/movies">Back to List</a>
-</div>
-
 
 @code {
-
+    public float rating;
     [SupplyParameterFromForm]
     public Movie Movie { get; set; } = new();
-    
+
 
     // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
     public async Task AddMovie()
     {
+        Movie.rateCount = 1;
+        if(rating == null)
+        {
+            rating = 0;
+            Movie.rateCount = 0;
+        }
+        Movie.Rating = rating;
+        
         DB.Movie.Add(Movie);
         await DB.SaveChangesAsync();
-        NavigationManager.NavigateTo("/movies");
-    }
+        NavigationManager.NavigateTo("/");
 
+    }
+    /*public async Task AddRating()
+    {
+        Movie.Rating.Add(rating);
+    }*/
 }

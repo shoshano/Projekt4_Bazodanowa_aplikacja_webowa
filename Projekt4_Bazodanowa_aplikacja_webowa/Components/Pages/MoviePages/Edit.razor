@@ -1,4 +1,4 @@
-﻿@page "/Movies/edit"
+﻿@page "/edit"
 @inject Projekt4_Bazodanowa_aplikacja_webowa.Data.ApplicationDbContext DB
 @using Projekt4_Bazodanowa_aplikacja_webowa
 @inject NavigationManager NavigationManager
@@ -37,22 +37,24 @@ else
                     <InputDate id="relasedate" @bind-Value="Movie.RelaseDate" class="form-control" />
                     <ValidationMessage For="() => Movie.RelaseDate" class="text-danger" />
                 </div>
+                
                 <div class="mb-3">
-                    <label for="rating" class="form-label">Rating:</label>
-                    <InputNumber id="rating" @bind-Value="Movie.Rating" class="form-control" />
-                    <ValidationMessage For="() => Movie.Rating" class="text-danger" />
+                    <label for="fotourl" class="form-label">FotoURL:</label> 
+                    <InputText id="fotourl" @bind-Value="Movie.FotoUrl" class="form-control" /> 
+                    <ValidationMessage For="() => Movie.FotoUrl" class="text-danger" /> 
+                </div> 
+                <div> 
+                    <button type="submit" class="btn btn-primary">Save</button> 
+                    <a class="btn btn-info" href="/">Back to List</a>
                 </div>
-                <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
         </div>
     </div>
 }
 
-<div>
-    <a href="/movies">Back to List</a>
-</div>
 
 @code {
+    public Movie? movie;
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
@@ -61,22 +63,25 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Movie ??= await DB.Movie.FirstOrDefaultAsync(m => m.Id == Id);
+        movie = await DB.Movie.FirstOrDefaultAsync(m => m.Id == Id);
 
-        if (Movie is null)
+        if (movie is null)
         {
             NavigationManager.NavigateTo("notfound");
         }
+        Movie = movie;
     }
 
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see https://aka.ms/RazorPagesCRUD.
     public async Task UpdateMovie()
     {
+        Movie.Rating = movie.Rating;
+        Movie.rateCount = movie.rateCount;
         DB.Attach(Movie!).State = EntityState.Modified;
 
         try
-        {
+           {
             await DB.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
@@ -91,7 +96,7 @@ else
             }
         }
 
-        NavigationManager.NavigateTo("/movies");
+        NavigationManager.NavigateTo("/");
     }
 
     bool MovieExists(int id)

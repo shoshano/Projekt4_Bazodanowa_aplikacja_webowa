@@ -1,4 +1,4 @@
-﻿@page "/movies/delete"
+﻿@page "/delete"
 @inject Projekt4_Bazodanowa_aplikacja_webowa.Data.ApplicationDbContext DB
 @using Projekt4_Bazodanowa_aplikacja_webowa
 @inject NavigationManager NavigationManager
@@ -35,7 +35,7 @@
         </dl>
         <EditForm method="post" Model="movie" OnValidSubmit="DeleteMovie" FormName="delete" Enhance>
             <button type="submit" class="btn btn-danger" disabled="@(movie is null)">Delete</button> |
-            <a href="/movies">Back to List</a>
+            <a href="/">Back to List</a>
         </EditForm>
     }
 </div>
@@ -60,6 +60,6 @@
     {
         DB.Movie.Remove(movie!);
         await DB.SaveChangesAsync();
-        NavigationManager.NavigateTo("/movies");
+        NavigationManager.NavigateTo("/");
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Projekt4_Bazodanowa_aplikacja_webowa.Data;
 
@@ -11,9 +12,11 @@ using Projekt4_Bazodanowa_aplikacja_webowa.Data;
 namespace Projekt4_Bazodanowa_aplikacja_webowa.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240513184853_pytajnik")]
+    partial class pytajnik
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,17 +237,14 @@ namespace Projekt4_Bazodanowa_aplikacja_webowa.Migrations
                     b.Property<string>("FotoUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("Rating")
-                        .HasColumnType("real");
+                    b.Property<string>("Rating")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("RelaseDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("rateCount")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
