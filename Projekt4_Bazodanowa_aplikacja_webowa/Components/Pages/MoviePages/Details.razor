@@ -17,27 +17,41 @@
         <p><em>Loading...</em></p>
     }
     else {
+        <div class="container">
+            <div class="row">
+                <!-- Image on the left side -->
+                <div class="col-md-4">
+                    <img src="@movie.FotoUrl" asp-append-version="true" class="img-fluid" />
+                </div>
+                <div class="col-md-8">
+                    <dl class="row">
+                        <dt class="col-sm-2">Title</dt>
+                        <dd class="col-sm-10">@movie.Title</dd>
+                        <dt class="col-sm-2">Description</dt>
+                        <dd class="col-sm-10">@movie.Description</dd>
+                        <dt class="col-sm-2">RelaseDate</dt>
+                            <dd class="col-sm-10">@movie.RelaseDate.ToLongDateString()</dd>
+                        <dt class="col-sm-2">Rating</dt>
+                        <dd class="col-sm-10">@strRate</dd>
+                    </dl>
+                    <div class="mb-3">
+                       
+                            <br />
+                            <InputNumber id="rating" @bind-Value="@rating" min="0" max="5" class="form-control" style="width: 7em" step = "0.1"/>
+                            <br />
+                            <button class="btn btn-primary" @onclick="save">Rate</button>
 
-        <dl class="row">
-            <dt class="col-sm-2">Title</dt>
-            <dd class="col-sm-10">@movie.Title</dd>
-            <dt class="col-sm-2">Description</dt>
-            <dd class="col-sm-10">@movie.Description</dd>
-            <dt class="col-sm-2">RelaseDate</dt>
-                <dd class="col-sm-10">@movie.RelaseDate.ToLongDateString()</dd>
-            <dt class="col-sm-2">Rating</dt>
-            <dd class="col-sm-10">@rate</dd>
-        </dl>
-        <div class="mb-3">  
-            <input type="number" id="MinRangeText" name="MinRangeText" value="@rating" min="0" max="5" step="0.5"/>
-            <button class="btn btn-primary" @onclick="save">Rate</button>
+                    </div>
+                    <div>
+                        <a class="btn btn-warning" href="@($"/edit?id={movie.Id}")">Edit</a>
+                        <a class="btn btn-info" href="@($"/")">Back to List</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <img src="@movie.FotoUrl" asp-append-version="true" width=300px/>
+        <!--<img src="@movie.FotoUrl" asp-append-version="true" width=300px/>-->
         
-        <div>
-            <a class="btn btn-warning" href="@($"/edit?id={movie.Id}")">Edit</a> 
-            <a class="btn btn-info" href="@($"/")">Back to List</a>
-        </div>
+        
     }
 </div>
 
@@ -45,6 +59,7 @@
     public Movie? movie;
     float? rating = 3;
     float? rate;
+    string? strRate;
 
     [SupplyParameterFromQuery]
     public int Id { get; set; }
@@ -63,6 +78,8 @@
             NavigationManager.NavigateTo("notfound");
         }
         rate = movie.Rating / movie.rateCount;
+       strRate = Convert.ToString(String.Format("{0:0.00}", rate));
+
     }
 
     private void save()
@@ -75,8 +92,8 @@
         movie.Rating = movie.Rating + rating;
         movie.rateCount += 1;
         rate = movie.Rating / movie.rateCount;
+        strRate = Convert.ToString(String.Format("{0:0.00}", rate));
         UpdateMovie();
-        rating = 0;
     }
     public async Task UpdateMovie()
     {

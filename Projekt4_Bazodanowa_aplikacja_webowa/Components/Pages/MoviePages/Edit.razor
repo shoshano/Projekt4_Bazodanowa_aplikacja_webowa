@@ -42,7 +42,20 @@ else
                     <label for="fotourl" class="form-label">FotoURL:</label> 
                     <InputText id="fotourl" @bind-Value="Movie.FotoUrl" class="form-control" /> 
                     <ValidationMessage For="() => Movie.FotoUrl" class="text-danger" /> 
-                </div> 
+                </div>
+
+                <div hidden>
+                    <label for="rating" class="form-label">Rating:</label>
+                    <InputNumber id="rating" @bind-Value="@Movie.Rating" class="form-control" />
+                    <ValidationMessage For="() => Movie.Rating" class="text-danger" />
+
+                </div>
+                <div hidden>
+                    <label for="ratingC" class="form-label">Rate Number:</label>
+                    <InputNumber id="ratingC" @bind-Value="@Movie.rateCount" class="form-control" />
+                    <ValidationMessage For="() => Movie.rateCount" class="text-danger" />
+
+                </div>
                 <div> 
                     <button type="submit" class="btn btn-primary">Save</button> 
                     <a class="btn btn-info" href="/">Back to List</a>
@@ -54,7 +67,7 @@ else
 
 
 @code {
-    public Movie? movie;
+    public Movie? movietemp;
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
@@ -63,21 +76,21 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        movie = await DB.Movie.FirstOrDefaultAsync(m => m.Id == Id);
+        Movie ??= await DB.Movie.FirstOrDefaultAsync(m => m.Id == Id);
 
-        if (movie is null)
+        if (Movie is null)
         {
             NavigationManager.NavigateTo("notfound");
         }
-        Movie = movie;
+        movietemp = Movie;
     }
 
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see https://aka.ms/RazorPagesCRUD.
     public async Task UpdateMovie()
     {
-        Movie.Rating = movie.Rating;
-        Movie.rateCount = movie.rateCount;
+        Movie.Rating = movietemp.Rating;
+        Movie.rateCount = movietemp.rateCount;
         DB.Attach(Movie!).State = EntityState.Modified;
 
         try

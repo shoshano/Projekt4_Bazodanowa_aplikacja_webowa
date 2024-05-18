@@ -9,15 +9,19 @@
 
 <h1>Movies</h1>
 
-<p>
-    <a href="create">Create New</a>
-</p>
+<AuthorizeView>
+    <Authorized>
+        <p>
+            <a class="btn btn-info" href="create">Create New</a>
+        </p>
+    </Authorized>
+    <NotAuthorized><a class="btn btn-info" href="Account/Login">Log in to add movies</a></NotAuthorized>
+</AuthorizeView>
 
 <QuickGrid Class="table" Items="DB.Movie">
     <PropertyColumn Property="movie => movie.Title" Sortable="true"/>
-    @*<PropertyColumn Property="movie => movie.Description" />*@
     <PropertyColumn Property="movie => movie.RelaseDate.Year"  Sortable="true"/>
-    <PropertyColumn Property="movie =>   movie.Rating/movie.rateCount" Sortable="true" />
+    <PropertyColumn Property="movie => countRate(movie.Rating, movie.rateCount)" Sortable="true" />
     
 
     <TemplateColumn Context="movie">
@@ -33,3 +37,15 @@
 
 
 </QuickGrid>
+
+@code{
+    public float? rating;
+    private string countRate(float? rate, float? count)
+    {
+        rating = (rate / count);
+        //rating = (float?)System.Math.Round(rating, 2);
+        
+        return String.Format("{0:0.00}", rating);
+    }
+
+}
